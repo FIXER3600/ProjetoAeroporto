@@ -4,7 +4,7 @@ module com.example.projetoaeroporto {
 
 
     opens com.example.projetoaeroporto to javafx.fxml;
-    exports com.example.projetoaeroporto;
+
     exports com.example.projetoaeroporto.boundary;
     opens com.example.projetoaeroporto.boundary to javafx.fxml;
     exports com.example.projetoaeroporto.control;

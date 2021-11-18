@@ -3,45 +3,46 @@ package com.example.projetoaeroporto.entity;
 import java.time.LocalDate;
 
 public class Cliente {
-    private String Nome;
-    private String Rg;
-    private LocalDate Nascimento;
-    private String Sexo;
+    private String nome;
+    private String rg;
+    private LocalDate nascimento;
+    private String sexo;
 
     public String getNome() {
-        return Nome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        Nome = nome;
+        this.nome = nome;
     }
 
     public String getRg() {
-        return Rg;
+        return rg;
     }
 
     public void setRg(String rg) {
-        Rg = rg;
+        this.rg = rg;
     }
 
     public LocalDate getNascimento() {
-        return Nascimento;
+        return nascimento;
     }
 
     public void setNascimento(LocalDate nascimento) {
-        Nascimento = nascimento;
+        this.nascimento = nascimento;
     }
 
     public String getSexo() {
-        return Sexo;
+        return sexo;
     }
 
     public void setSexo(String sexo) {
-        Sexo = sexo;
+        this.sexo = sexo;
     }
+
     @Override
     public String toString() {
-        return this.Nome;
+        return this.nome;
     }
 
 }
