@@ -1,16 +1,15 @@
 package com.example.projetoaeroporto.boundary;
 
+import com.example.projetoaeroporto.Telas.TelaVoo;
 import com.example.projetoaeroporto.control.VooControl;
 import com.example.projetoaeroporto.entity.Voo;
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
 
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class VooBoundary extends Application {
+public class VooBoundary extends TelaVoo {
     private TextField txtId = new TextField();
     private TextField txtOrigem = new TextField();
     private TextField txtDestino = new TextField();
@@ -35,6 +34,8 @@ public class VooBoundary extends Application {
 
 
     private Button btnReservar= new Button("Reservar");
+    private Button btnRemover= new Button("Remover");
+    private Button btnPesquisar = new Button("Pesquisar");
 
     private void criarTabela(){
         TableColumn<Voo,Integer> col1=new TableColumn<>("Id");
@@ -57,28 +58,49 @@ public class VooBoundary extends Application {
         );
 
 
-        TableColumn<Voo, Double> col6 = new TableColumn<>("Preco");
-        col6.setCellValueFactory(
+        TableColumn<Voo, Double> col5 = new TableColumn<>("Preco");
+        col5.setCellValueFactory(
                 new PropertyValueFactory<Voo,Double>("Preco")
         );
 
+        TableColumn<Voo, String> col6 = new TableColumn<>("Ações");
+        col6.setCellFactory( (tbcol) -> {
+                    Button btnRemover = new Button("Remover");
+                    TableCell<Voo, String> tcell = new TableCell<Voo, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btnRemover.setOnAction( (e) -> {
+                                    Voo v = getTableView().getItems().get(getIndex());
+                                    control.remover(v.getId());
+                                });
+                                setGraphic(btnRemover);
+                                setText(null);
+                            }
+                        }
+                    };
+                    return tcell;
+                }
+        );
         table.getSelectionModel().selectedItemProperty().addListener( (obs, old, novo) -> {
                     control.fromEntity(novo);
                 }
         );
-
-        table.getColumns().addAll(col1, col2, col3, col4);
+        table.getColumns().addAll(col1, col2, col3, col4, col5, col6);
         table.setItems(control.getLista());
     }
     @Override
-    public void start(Stage stage) throws Exception {
+    public Pane render() {
         BorderPane panPrincipal = new BorderPane();
         GridPane panCampos = new GridPane();
 
+        criarTabela();
+
         panPrincipal.setTop(panCampos);
         panPrincipal.setCenter(table);
-        
-        Scene scn = new Scene(panPrincipal, 600, 400);
 
 
         Bindings.bindBidirectional(txtId.textProperty(), control.id, new NumberStringConverter());
@@ -99,14 +121,20 @@ public class VooBoundary extends Application {
         panCampos.add(txtPreco, 1, 4);
 
         panCampos.add(btnReservar, 0, 5);
+        panCampos.add(btnRemover,1,5);
+        panCampos.add(btnPesquisar, 2, 5);
 
+        btnReservar.setOnAction((e) -> {
+            control.reservar();
+            new Alert(Alert.AlertType.INFORMATION, "Voo cadastrado com sucesso").showAndWait();
+        });
 
-        stage.setTitle("Tela de Vôos");
-        stage.setScene(scn);
-        stage.show();
+        btnPesquisar.setOnAction( (e) -> {
+            control.pesquisar();
+        });
+
+    return panPrincipal;
     }
 
-    public static void main(String[] args) {
-        Application.launch(VooBoundary.class, args);
-    }
+
 }

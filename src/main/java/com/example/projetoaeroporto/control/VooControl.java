@@ -1,17 +1,20 @@
 package com.example.projetoaeroporto.control;
 
+import com.example.projetoaeroporto.DAO.VooDAO;
+import com.example.projetoaeroporto.DAO.VooDAOImplements;
 import com.example.projetoaeroporto.entity.Voo;
 import javafx.beans.property.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VooControl {
+
+    private VooDAO vooDAO = new VooDAOImplements();
 
     public IntegerProperty id = new SimpleIntegerProperty(0);
     public StringProperty origem = new SimpleStringProperty("");
@@ -24,14 +27,32 @@ public class VooControl {
     private ObservableList<Voo>  voo = FXCollections.observableArrayList();
 
 
+
+    public VooControl() {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisar() {
+        voo.clear();
+        List<Voo> encontrados = vooDAO.pesquisarPorId( id.get() );
+        voo.addAll( encontrados );
+        if (!voo.isEmpty()) {
+            fromEntity(voo.get(0));
+        }
+    }
+
     public Voo toEntity() {
-        Voo p = new Voo();
-        p.setId(id.get());
-        p.setOrigem(origem.get());
-        p.setDestino(destino.get());
-        p.setDecolagem((LocalDateTime)decolagem.get());
-        p.setPouso((LocalDateTime)pouso.get());
-        return p;
+        Voo v = new Voo();
+        v.setId(id.get());
+        v.setOrigem(origem.get());
+        v.setDestino(destino.get());
+        v.setDecolagem((LocalDateTime)decolagem.get());
+        v.setPreco(preco.get());
+        return v;
     }
 
     public void fromEntity(Voo v) {
@@ -39,9 +60,21 @@ public class VooControl {
         origem.set(v.getOrigem());
         destino.set(v.getDestino());
         decolagem.set(v.getDecolagem());
-        pouso.set(v.getPouso());
+        preco.set(v.getPreco());
+    }
+    public void reservar() {
+
+        Voo v = new Voo();
+
+        fromEntity(v);
     }
 
+    public void alterar() {
+
+    }
+    public void remover(int id) {
+        vooDAO.remover(id);
+    }
     public ObservableList<Voo> getLista() {
         return voo;
     }

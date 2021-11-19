@@ -1,7 +1,7 @@
 package com.example.projetoaeroporto.entity;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 public class Voo {
     private int id;
