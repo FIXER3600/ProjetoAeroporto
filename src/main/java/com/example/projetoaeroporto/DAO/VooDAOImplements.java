@@ -10,9 +10,9 @@ import java.util.List;
 
 public class VooDAOImplements implements VooDAO{
 
-    private static final String URIDB = "jdbc:mariadb://localhost:3306/voodb?allowMultiQueries=true";
+    private static final String URLDB = "jdbc:mariadb://localhost:3306/Aeroporto?allowMultiQueries=true";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "123456";
+    private static final String PASSWORD = "poo123";
 
 
     public VooDAOImplements() {
@@ -24,7 +24,7 @@ public class VooDAOImplements implements VooDAO{
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URIDB, USUARIO, PASSWORD);
+        return DriverManager.getConnection(URLDB, USUARIO, PASSWORD);
     }
 
     @Override
