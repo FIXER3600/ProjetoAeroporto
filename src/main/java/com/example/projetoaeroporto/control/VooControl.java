@@ -21,7 +21,7 @@ public class VooControl {
     public StringProperty destino = new SimpleStringProperty("");
     public ObjectProperty decolagem = new SimpleObjectProperty(LocalDateTime.now());
     public ObjectProperty pouso = new SimpleObjectProperty(LocalDateTime.now());
-    public DoubleProperty preco= new SimpleDoubleProperty(0);
+    public DoubleProperty preco= new SimpleDoubleProperty(0.0);
 
     private List<Voo> vooGeral = new ArrayList<>();
     private ObservableList<Voo>  voo = FXCollections.observableArrayList();
@@ -54,7 +54,14 @@ public class VooControl {
         v.setPreco(preco.get());
         return v;
     }
-
+    public void salvar() {
+        Voo voo = toEntity();
+        if (voo.getId() == 0) {
+            vooDAO.reservar( voo );
+        } else {
+            vooDAO.atualizar( id.get(), voo );
+        }
+    }
     public void fromEntity(Voo v) {
         id.set(v.getId());
         origem.set(v.getOrigem());
@@ -64,17 +71,16 @@ public class VooControl {
     }
     public void reservar() {
 
-        Voo v = new Voo();
+        Voo v = toEntity();
 
         fromEntity(v);
     }
 
-    public void alterar() {
 
-    }
     public void remover(int id) {
         vooDAO.remover(id);
     }
+
     public ObservableList<Voo> getLista() {
         return voo;
     }

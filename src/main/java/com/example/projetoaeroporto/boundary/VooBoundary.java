@@ -36,6 +36,7 @@ public class VooBoundary extends TelaVoo {
     private Button btnReservar= new Button("Reservar");
     private Button btnRemover= new Button("Remover");
     private Button btnPesquisar = new Button("Pesquisar");
+    private Button btnSalvar = new Button("Salvar");
 
     private void criarTabela(){
         TableColumn<Voo,Integer> col1=new TableColumn<>("Id");
@@ -123,15 +124,22 @@ public class VooBoundary extends TelaVoo {
         panCampos.add(btnReservar, 0, 5);
         panCampos.add(btnRemover,1,5);
         panCampos.add(btnPesquisar, 2, 5);
+        panCampos.add(btnSalvar,3,5);
 
         btnReservar.setOnAction((e) -> {
             control.reservar();
             new Alert(Alert.AlertType.INFORMATION, "Voo cadastrado com sucesso").showAndWait();
         });
 
+        btnSalvar.setOnAction((e)->{
+            control.salvar();
+            new Alert(Alert.AlertType.INFORMATION, "Voo salvo com sucesso").showAndWait();
+        });
+
         btnPesquisar.setOnAction( (e) -> {
             control.pesquisar();
         });
+
 
     return panPrincipal;
     }
